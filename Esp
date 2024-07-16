@@ -1,0 +1,49 @@
+local function highlightPlayer(player)
+  local character = player.Character
+  if character then
+    local humanoid = character:WaitForChild("Humanoid")
+    if humanoid then
+      humanoid.Archivable = true -- Makes the highlight persistent
+      humanoid.RenderType = Enum.HumanoidRenderType.Highlight
+
+      local nameTag = character:FindFirstChild("NameTag")
+      if not nameTag then
+        nameTag = character:WaitForChild("Head"):InsertClone():SetParent(character)
+        nameTag.Name = "NameTag"
+        nameTag.Text = player.Name
+        nameTag.Size = Vector2.new(150, 20) -- Adjust size as needed
+        nameTag.Font = Enum.TextFont.Headings
+        nameTag.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
+        nameTag.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+        nameTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Black outline
+        nameTag.TextStrokeThickness = 0.5
+        nameTag.BackgroundTransparency = 0.7 -- Adjust transparency as needed
+        nameTag.CanCollide = false
+        nameTag.TopAnchor = 0.8 -- Adjust position as needed
+        nameTag.BottomAnchor = 0.2
+        nameTag.Head = true -- Makes the nametag follow the head
+      end
+
+      local tracer = character:FindFirstChild("Tracer")
+      if not tracer then
+        tracer = workspace:CreatePart()
+        tracer.Name = "Tracer"
+        tracer.CanCollide = false
+        tracer.Size = Vector3.new(3, 3, 3) -- Adjust size as needed
+        tracer.Shape = Enum.BasicPartShape.Sphere
+        tracer.Material = Enum.Material.Neon
+        tracer.Color = Color3.fromRGB(255, 0, 0) -- Adjust color as needed
+        tracer.Transparency = 0.5 -- Adjust transparency as needed
+        tracer.Parent = character.Torso
+      end
+    end
+  end
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+  highlightPlayer(player)
+end)
+
+for _, player in pairs(game.Players:GetPlayers()) do
+  highlightPlayer(player)
+end
